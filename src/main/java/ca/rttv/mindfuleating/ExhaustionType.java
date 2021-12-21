@@ -7,5 +7,5 @@ public enum ExhaustionType {
     HURT,
     JUMP,
     SWIMMING,
-    WALKING;
+    WALKING
 }

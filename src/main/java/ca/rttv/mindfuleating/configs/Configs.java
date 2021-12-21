@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 
 public class Configs {
 
-    private static File configFile = new File(getConfigDirectory(), "mindfuleating.json");
-    private static float configVersion = 1.0f;
+    private static final File configFile = new File(getConfigDirectory(), "mindfuleating.json");
+    private static final float configVersion = 1.0f;
     private static JsonObject jsonObject;
 
     public static File getConfigDirectory() {
@@ -36,7 +36,8 @@ public class Configs {
         JsonObject json = new JsonObject();
         json.add("version", new JsonPrimitive(configVersion));
         json.add("exhaustionReductionAsDecimal", new JsonPrimitive(0.75f));
-        JsonObject foodGroups = new JsonObject(); {
+        JsonObject foodGroups = new JsonObject();
+        {
             foodGroups.add("destroy", new JsonPrimitive("grains"));
             foodGroups.add("heal", new JsonPrimitive("sugars"));
             foodGroups.add("attack", new JsonPrimitive("attack"));
@@ -44,8 +45,10 @@ public class Configs {
             foodGroups.add("jump", new JsonPrimitive("vegetables"));
             foodGroups.add("swim", new JsonPrimitive("fruits"));
             foodGroups.add("walk", new JsonPrimitive("vegetables"));
-        } json.add("foodGroups", foodGroups);
-        JsonArray speedy = new JsonArray(); {
+        }
+        json.add("foodGroups", foodGroups);
+        JsonArray speedy = new JsonArray();
+        {
             speedy.add("minecraft:melon_slice");
             speedy.add("minecraft:sweet_berries");
             speedy.add("minecraft:cooked_mutton");
@@ -54,8 +57,10 @@ public class Configs {
             speedy.add("minecraft:cooked_cod");
             speedy.add("minecraft:beetroot");
             speedy.add("minecraft:beetroot_soup");
-        } json.add("speedy", speedy);
-        JsonArray stackSize = new JsonArray(); {
+        }
+        json.add("speedy", speedy);
+        JsonArray stackSize = new JsonArray();
+        {
             {
                 JsonObject box = new JsonObject();
                 box.add("name", new JsonPrimitive("minecraft:cake"));
@@ -86,8 +91,10 @@ public class Configs {
                 box.add("value", new JsonPrimitive(16));
                 stackSize.add(box);
             }
-        } json.add("stackSize", stackSize);
-        JsonArray saturationModifier = new JsonArray(); {
+        }
+        json.add("stackSize", stackSize);
+        JsonArray saturationModifier = new JsonArray();
+        {
             {
                 JsonObject box = new JsonObject();
                 box.add("name", new JsonPrimitive("minecraft:cooked_mutton"));
@@ -112,8 +119,10 @@ public class Configs {
                 box.add("value", new JsonPrimitive(0.1f));
                 saturationModifier.add(box);
             }
-        } json.add("saturationModifier", saturationModifier);
-        JsonArray hunger = new JsonArray(); /*{...}*/ json.add("hunger", hunger);
+        }
+        json.add("saturationModifier", saturationModifier);
+        JsonArray hunger = new JsonArray(); /*{...}*/
+        json.add("hunger", hunger);
         return json;
     }
 

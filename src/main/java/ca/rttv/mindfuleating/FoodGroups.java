@@ -5,7 +5,6 @@ import ca.rttv.mindfuleating.configs.Configs;
 import net.fabricmc.fabric.api.tag.TagFactory;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 import net.minecraft.tag.Tag;
 import net.minecraft.util.Identifier;
 

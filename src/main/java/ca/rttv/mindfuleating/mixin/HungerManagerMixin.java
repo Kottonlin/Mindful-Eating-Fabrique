@@ -2,7 +2,6 @@ package ca.rttv.mindfuleating.mixin;
 
 import ca.rttv.mindfuleating.ExhaustionType;
 import ca.rttv.mindfuleating.FoodGroups;
-import ca.rttv.mindfuleating.MindfulEating;
 import ca.rttv.mindfuleating.access.HungerManagerDuck;
 import ca.rttv.mindfuleating.configs.Configs;
 import net.minecraft.client.MinecraftClient;
@@ -66,10 +65,10 @@ abstract class HungerManagerMixin implements HungerManagerDuck {
     public void generateHungerIcons() {
         this.hungerIcons = new int[10]; // this should be here so unrecognized foods have no custom icons
         if (FoodGroups.fruits.contains(mostRecentFood) == false &&
-            FoodGroups.grains.contains(mostRecentFood) == false &&
-            FoodGroups.proteins.contains(mostRecentFood) == false &&
-            FoodGroups.sugars.contains(mostRecentFood) == false &&
-            FoodGroups.vegetables.contains(mostRecentFood) == false) {
+                FoodGroups.grains.contains(mostRecentFood) == false &&
+                FoodGroups.proteins.contains(mostRecentFood) == false &&
+                FoodGroups.sugars.contains(mostRecentFood) == false &&
+                FoodGroups.vegetables.contains(mostRecentFood) == false) {
             MinecraftClient.getInstance().player.sendMessage(Text.of("§cYour most recent food is not under the Mindful Eating food arrays, if this is a modded food please add it to the custom list via the config"), false);
             return;
         }

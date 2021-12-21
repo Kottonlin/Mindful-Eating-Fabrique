@@ -2,7 +2,6 @@ package ca.rttv.mindfuleating.mixin;
 
 import ca.rttv.mindfuleating.ExhaustionType;
 import ca.rttv.mindfuleating.FoodGroups;
-import ca.rttv.mindfuleating.MindfulEating;
 import ca.rttv.mindfuleating.configs.Configs;
 import net.minecraft.block.Block;
 import org.spongepowered.asm.mixin.Mixin;
