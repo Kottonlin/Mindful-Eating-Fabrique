@@ -24,6 +24,7 @@ abstract class HungerManagerMixin implements HungerManagerDuck {
 
     private Item mostRecentFood;
     private int[] hungerIcons = new int[10];
+    private MinecraftClient client = MinecraftClient.getInstance();
 
     @ModifyArg(method = "update(Lnet/minecraft/entity/player/PlayerEntity;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;addExhaustion(F)V"), index = 0)
     private float add(float originalExhaustion) {
@@ -63,36 +64,38 @@ abstract class HungerManagerMixin implements HungerManagerDuck {
 
     @Override
     public void generateHungerIcons() {
-        this.hungerIcons = new int[10]; // this should be here so unrecognized foods have no custom icons
-        if (FoodGroups.fruits.contains(mostRecentFood) == false &&
-                FoodGroups.grains.contains(mostRecentFood) == false &&
-                FoodGroups.proteins.contains(mostRecentFood) == false &&
-                FoodGroups.sugars.contains(mostRecentFood) == false &&
-                FoodGroups.vegetables.contains(mostRecentFood) == false) {
-            MinecraftClient.getInstance().player.sendMessage(Text.of("§cYour most recent food is not under the Mindful Eating food arrays, if this is a modded food please add it to the custom list via the config"), false);
-            return;
-        }
-        int i = 0;
-        for (; ; ) {
-            if (FoodGroups.fruits.contains(mostRecentFood)) {
-                this.hungerIcons[i++] = 9;
-                if (i > this.hungerIcons.length - 1) break;
+        if (this.client.player != null) {
+            this.hungerIcons = new int[10]; // this should be here so unrecognized foods have no custom icons
+            if (FoodGroups.fruits.contains(mostRecentFood) == false &&
+                    FoodGroups.grains.contains(mostRecentFood) == false &&
+                    FoodGroups.proteins.contains(mostRecentFood) == false &&
+                    FoodGroups.sugars.contains(mostRecentFood) == false &&
+                    FoodGroups.vegetables.contains(mostRecentFood) == false) {
+                this.client.player.sendMessage(Text.of("§cYour most recent food is not under the Mindful Eating food arrays, if this is a modded food please add it to the custom list via the config"), false);
+                return;
             }
-            if (FoodGroups.grains.contains(mostRecentFood)) {
-                this.hungerIcons[i++] = 27;
-                if (i > this.hungerIcons.length - 1) break;
-            }
-            if (FoodGroups.proteins.contains(mostRecentFood)) {
-                this.hungerIcons[i++] = 0;
-                if (i > this.hungerIcons.length - 1) break;
-            }
-            if (FoodGroups.sugars.contains(mostRecentFood)) {
-                this.hungerIcons[i++] = 36;
-                if (i > this.hungerIcons.length - 1) break;
-            }
-            if (FoodGroups.vegetables.contains(mostRecentFood)) {
-                this.hungerIcons[i++] = 18;
-                if (i > this.hungerIcons.length - 1) break;
+            int i = 0;
+            for (; ; ) {
+                if (FoodGroups.fruits.contains(mostRecentFood)) {
+                    this.hungerIcons[i++] = 9;
+                    if (i > this.hungerIcons.length - 1) break;
+                }
+                if (FoodGroups.grains.contains(mostRecentFood)) {
+                    this.hungerIcons[i++] = 27;
+                    if (i > this.hungerIcons.length - 1) break;
+                }
+                if (FoodGroups.proteins.contains(mostRecentFood)) {
+                    this.hungerIcons[i++] = 0;
+                    if (i > this.hungerIcons.length - 1) break;
+                }
+                if (FoodGroups.sugars.contains(mostRecentFood)) {
+                    this.hungerIcons[i++] = 36;
+                    if (i > this.hungerIcons.length - 1) break;
+                }
+                if (FoodGroups.vegetables.contains(mostRecentFood)) {
+                    this.hungerIcons[i++] = 18;
+                    if (i > this.hungerIcons.length - 1) break;
+                }
             }
         }
     }

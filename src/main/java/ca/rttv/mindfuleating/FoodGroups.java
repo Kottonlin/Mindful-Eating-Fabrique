@@ -17,42 +17,44 @@ public class FoodGroups {
     public static Tag<Item> sugars = TagFactory.ITEM.create(new Identifier("mindfuleating", "sugars"));
     public static Tag<Item> vegetables = TagFactory.ITEM.create(new Identifier("mindfuleating", "vegetables"));
     public static Object[][] exhaustionGroups = new Object[7][2];
-    static MinecraftClient mc = MinecraftClient.getInstance();
+    static MinecraftClient client = MinecraftClient.getInstance();
 
     public static boolean shouldReceiveBuffs(ExhaustionType type) {
-        Item mostRecentFood = ((HungerManagerDuck) mc.player.getHungerManager()).mostRecentFood();
-        for (Object[] exhaustionGroup : exhaustionGroups) {
-            if (exhaustionGroup[0].equals(type)) {
-                for (int i = 0; i < ((ArrayList<?>) exhaustionGroup[1]).size(); i++) {
-                    switch ((FoodGroup) ((ArrayList<?>) exhaustionGroup[1]).get(i)) {
-                        case FRUITS -> {
-                            if (fruits.contains(mostRecentFood)) {
-                                MindfulEating.shouldHaveSheen = 60;
-                                return true;
+        if (client.player != null) {
+            Item mostRecentFood = ((HungerManagerDuck) client.player.getHungerManager()).mostRecentFood();
+            for (Object[] exhaustionGroup : exhaustionGroups) {
+                if (exhaustionGroup[0].equals(type)) {
+                    for (int i = 0; i < ((ArrayList<?>) exhaustionGroup[1]).size(); i++) {
+                        switch ((FoodGroup) ((ArrayList<?>) exhaustionGroup[1]).get(i)) {
+                            case FRUITS -> {
+                                if (fruits.contains(mostRecentFood)) {
+                                    MindfulEating.shouldHaveSheen = 60;
+                                    return true;
+                                }
                             }
-                        }
-                        case GRAINS -> {
-                            if (grains.contains(mostRecentFood)) {
-                                MindfulEating.shouldHaveSheen = 60;
-                                return true;
+                            case GRAINS -> {
+                                if (grains.contains(mostRecentFood)) {
+                                    MindfulEating.shouldHaveSheen = 60;
+                                    return true;
+                                }
                             }
-                        }
-                        case PROTEINS -> {
-                            if (proteins.contains(mostRecentFood)) {
-                                MindfulEating.shouldHaveSheen = 60;
-                                return true;
+                            case PROTEINS -> {
+                                if (proteins.contains(mostRecentFood)) {
+                                    MindfulEating.shouldHaveSheen = 60;
+                                    return true;
+                                }
                             }
-                        }
-                        case SUGARS -> {
-                            if (sugars.contains(mostRecentFood)) {
-                                MindfulEating.shouldHaveSheen = 60;
-                                return true;
+                            case SUGARS -> {
+                                if (sugars.contains(mostRecentFood)) {
+                                    MindfulEating.shouldHaveSheen = 60;
+                                    return true;
+                                }
                             }
-                        }
-                        case VEGETABLES -> {
-                            if (vegetables.contains(mostRecentFood)) {
-                                MindfulEating.shouldHaveSheen = 60;
-                                return true;
+                            case VEGETABLES -> {
+                                if (vegetables.contains(mostRecentFood)) {
+                                    MindfulEating.shouldHaveSheen = 60;
+                                    return true;
+                                }
                             }
                         }
                     }
@@ -60,65 +62,6 @@ public class FoodGroups {
             }
         }
         return false;
-    }
-
-    public static void registerFoodGroups() {
-//        fruits.removeAll(fruits);
-//        grains.removeAll(grains);
-//        proteins.removeAll(proteins);
-//        sugars.removeAll(sugars);
-//        vegetables.removeAll(vegetables);
-//
-//        fruits.add(Items.APPLE);
-//        fruits.add(Items.CHORUS_FRUIT);
-//        fruits.add(Items.ENCHANTED_GOLDEN_APPLE);
-//        fruits.add(Items.GOLDEN_APPLE);
-//        fruits.add(Items.SWEET_BERRIES);
-//        fruits.add(Items.GLOW_BERRIES);
-//        grains.add(Items.BREAD);
-//        grains.add(Items.COOKIE);
-//        grains.add(Items.ENCHANTED_GOLDEN_APPLE);
-//        grains.add(Items.CAKE);
-//        proteins.add(Items.BEEF);
-//        proteins.add(Items.CHICKEN);
-//        proteins.add(Items.COD);
-//        proteins.add(Items.COOKED_BEEF);
-//        proteins.add(Items.COOKED_CHICKEN);
-//        proteins.add(Items.COOKED_COD);
-//        proteins.add(Items.COOKED_MUTTON);
-//        proteins.add(Items.COOKED_PORKCHOP);
-//        proteins.add(Items.COOKED_RABBIT);
-//        proteins.add(Items.COOKED_SALMON);
-//        proteins.add(Items.ENCHANTED_GOLDEN_APPLE);
-//        proteins.add(Items.MUTTON);
-//        proteins.add(Items.PORKCHOP);
-//        proteins.add(Items.PUFFERFISH);
-//        proteins.add(Items.PUMPKIN_PIE);
-//        proteins.add(Items.ROTTEN_FLESH);
-//        proteins.add(Items.SALMON);
-//        proteins.add(Items.SPIDER_EYE);
-//        proteins.add(Items.TROPICAL_FISH);
-//        proteins.add(Items.CAKE);
-//        sugars.add(Items.COOKIE);
-//        sugars.add(Items.ENCHANTED_GOLDEN_APPLE);
-//        sugars.add(Items.GOLDEN_APPLE);
-//        sugars.add(Items.GOLDEN_CARROT);
-//        sugars.add(Items.HONEY_BOTTLE);
-//        sugars.add(Items.PUMPKIN_PIE);
-//        sugars.add(Items.CAKE);
-//        vegetables.add(Items.BAKED_POTATO);
-//        vegetables.add(Items.BEETROOT);
-//        vegetables.add(Items.BEETROOT_SOUP);
-//        vegetables.add(Items.CARROT);
-//        vegetables.add(Items.DRIED_KELP);
-//        vegetables.add(Items.ENCHANTED_GOLDEN_APPLE);
-//        vegetables.add(Items.GOLDEN_CARROT);
-//        vegetables.add(Items.MELON_SLICE);
-//        vegetables.add(Items.MUSHROOM_STEW);
-//        vegetables.add(Items.POISONOUS_POTATO);
-//        vegetables.add(Items.POTATO);
-//        vegetables.add(Items.PUMPKIN_PIE);
-//        vegetables.add(Items.SUSPICIOUS_STEW);
     }
 
     public static void registerExhaustionGroups() {
