@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:beef",
+    "minecraft:chicken",
+    "minecraft:cod",
+    "minecraft:cooked_beef",
+    "minecraft:cooked_chicken",
+    "minecraft:cooked_cod",
+    "minecraft:cooked_mutton",
+    "minecraft:cooked_porkchop",
+    "minecraft:cooked_rabbit",
+    "minecraft:cooked_salmon",
+    "minecraft:enchanted_golden_apple",
+    "minecraft:mutton",
+    "minecraft:porkchop",
+    "minecraft:pufferfish",
+    "minecraft:pumpkin_pie",
+    "minecraft:rotten_flesh",
+    "minecraft:salmon",
+    "minecraft:spider_eye",
+    "minecraft:tropical_fish",
+    "minecraft:cake"
+  ]
+}

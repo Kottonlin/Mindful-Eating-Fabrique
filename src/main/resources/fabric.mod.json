@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "mindfuleating",
+  "version": "${version}",
+  "name": "Mindful Eating",
+  "description": "A Fabric port of the Forge mod Mindful Eating; the mod rebalances food stats and gives subtle perks for different food groups.",
+  "authors": [
+    "RTTV",
+    "ryleu (minor help)"
+  ],
+  "contact": {
+    "sources": "https://github.com/RTTV/MindfulEating-Fabrick"
+  },
+  "license": "CC0-1.0",
+  "icon": "assets/mindfuleating/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "ca.rttv.mindfuleating.MindfulEating"
+    ]
+  },
+  "mixins": [
+    "mindfuleating.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "fabric": "*",
+    "minecraft": "1.18.x",
+    "java": ">=17"
+  }
+}
