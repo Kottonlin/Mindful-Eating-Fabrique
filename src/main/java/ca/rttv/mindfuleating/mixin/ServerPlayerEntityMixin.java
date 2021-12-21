@@ -35,18 +35,18 @@ abstract class ServerPlayerEntityMixin extends PlayerEntity {
         NbtCompound nbt = new NbtCompound();
         //noinspection RedundantCast
         ((ServerPlayerEntity) (Object) this).writeNbt(nbt); // this actually writes this's playerdata to our nbtcompound, not let us write to this's nbt file, confusing right?
-        packet.writeString(nbt.getString("mostRecentFood")); // adds a string to the packet
+        packet.writeString(nbt.getString("mostRecentFood")); // adds a string to the packet // 1st
 
-        packet.writeString(MindfulEating.jsonArrayToPacketString(Configs.getJsonObject().get("stackSize").getAsJsonArray(), "name", "string")); // adds a stack
-        packet.writeString(MindfulEating.jsonArrayToPacketString(Configs.getJsonObject().get("stackSize").getAsJsonArray(), "value", "int"));
+        packet.writeString(MindfulEating.jsonArrayToPacketString(Configs.getJsonObject().get("stackSize").getAsJsonArray(), "name", "string")); // adds a stack // 2nd
+        packet.writeString(MindfulEating.jsonArrayToPacketString(Configs.getJsonObject().get("stackSize").getAsJsonArray(), "value", "int")); // 3rd
 
-        packet.writeString(MindfulEating.jsonArrayToPacketString(Configs.getJsonObject().get("speedy").getAsJsonArray(), "string"));
+        packet.writeString(MindfulEating.jsonArrayToPacketString(Configs.getJsonObject().get("speedy").getAsJsonArray(), "string")); // 4th
 
-        packet.writeString(MindfulEating.jsonArrayToPacketString(Configs.getJsonObject().get("saturationModifier").getAsJsonArray(), "name", "string"));
-        packet.writeString(MindfulEating.jsonArrayToPacketString(Configs.getJsonObject().get("saturationModifier").getAsJsonArray(), "value", "int"));
+        packet.writeString(MindfulEating.jsonArrayToPacketString(Configs.getJsonObject().get("saturationModifier").getAsJsonArray(), "name", "string")); // 5th
+        packet.writeString(MindfulEating.jsonArrayToPacketString(Configs.getJsonObject().get("saturationModifier").getAsJsonArray(), "value", "int")); // 6th
 
-        packet.writeString(MindfulEating.jsonArrayToPacketString(Configs.getJsonObject().get("hunger").getAsJsonArray(), "name", "string"));
-        packet.writeString(MindfulEating.jsonArrayToPacketString(Configs.getJsonObject().get("hunger").getAsJsonArray(), "value", "int"));
+        packet.writeString(MindfulEating.jsonArrayToPacketString(Configs.getJsonObject().get("hunger").getAsJsonArray(), "name", "string")); // 7th
+        packet.writeString(MindfulEating.jsonArrayToPacketString(Configs.getJsonObject().get("hunger").getAsJsonArray(), "value", "int")); // 8th
         ServerPlayNetworking.send((ServerPlayerEntity) (Object) this, MindfulEating.MindfulEatingDataS2CPacket, packet); // sends a packet
     }
 }
