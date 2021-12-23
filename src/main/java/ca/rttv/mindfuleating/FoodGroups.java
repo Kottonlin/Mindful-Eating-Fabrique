@@ -21,6 +21,7 @@ public class FoodGroups {
 
     public static boolean shouldReceiveBuffs(ExhaustionType type) {
         if (client.player != null) {
+            int bonusSheenTicks = type.getBonusSheenTicks();
             Item mostRecentFood = ((HungerManagerDuck) client.player.getHungerManager()).mostRecentFood();
             for (Object[] exhaustionGroup : exhaustionGroups) {
                 if (exhaustionGroup[0].equals(type)) {
@@ -28,31 +29,31 @@ public class FoodGroups {
                         switch ((FoodGroup) ((ArrayList<?>) exhaustionGroup[1]).get(i)) {
                             case FRUITS -> {
                                 if (fruits.contains(mostRecentFood)) {
-                                    MindfulEating.shouldHaveSheen = 60;
+                                    MindfulEating.shouldHaveSheen = bonusSheenTicks;
                                     return true;
                                 }
                             }
                             case GRAINS -> {
                                 if (grains.contains(mostRecentFood)) {
-                                    MindfulEating.shouldHaveSheen = 60;
+                                    MindfulEating.shouldHaveSheen = bonusSheenTicks;
                                     return true;
                                 }
                             }
                             case PROTEINS -> {
                                 if (proteins.contains(mostRecentFood)) {
-                                    MindfulEating.shouldHaveSheen = 60;
+                                    MindfulEating.shouldHaveSheen = bonusSheenTicks;
                                     return true;
                                 }
                             }
                             case SUGARS -> {
                                 if (sugars.contains(mostRecentFood)) {
-                                    MindfulEating.shouldHaveSheen = 60;
+                                    MindfulEating.shouldHaveSheen = bonusSheenTicks;
                                     return true;
                                 }
                             }
                             case VEGETABLES -> {
                                 if (vegetables.contains(mostRecentFood)) {
-                                    MindfulEating.shouldHaveSheen = 60;
+                                    MindfulEating.shouldHaveSheen = bonusSheenTicks;
                                     return true;
                                 }
                             }

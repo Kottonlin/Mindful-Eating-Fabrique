@@ -1,5 +1,6 @@
 package ca.rttv.mindfuleating.configs;
 
+import ca.rttv.mindfuleating.MindfulEating;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -12,8 +13,8 @@ import java.util.stream.Collectors;
 
 public class Configs {
 
-    private static final File configFile = new File(getConfigDirectory(), "mindfuleating.json");
-    private static final float configVersion = 1.0f;
+    private static File configFile = new File(getConfigDirectory(), "mindfuleating.json");
+    private static float configVersion = 1.1f;
     private static JsonObject jsonObject;
 
     public static File getConfigDirectory() {
@@ -34,8 +35,13 @@ public class Configs {
 
     public static JsonObject generateDefaultConfig() {
         JsonObject json = new JsonObject();
+
         json.add("version", new JsonPrimitive(configVersion));
+
         json.add("exhaustionReductionAsDecimal", new JsonPrimitive(0.75f));
+
+        json.add("useClassicIcons", new JsonPrimitive(false));
+
         JsonObject foodGroups = new JsonObject();
         {
             foodGroups.add("destroy", new JsonPrimitive("grains"));
@@ -47,6 +53,22 @@ public class Configs {
             foodGroups.add("walk", new JsonPrimitive("vegetables"));
         }
         json.add("foodGroups", foodGroups);
+
+        JsonArray sheenTexture = new JsonArray();
+        {
+            sheenTexture.add(false);
+            sheenTexture.add(false);
+            sheenTexture.add(false);
+            sheenTexture.add(false);
+            sheenTexture.add(false);
+            sheenTexture.add(false);
+            sheenTexture.add(true);
+            sheenTexture.add(true);
+            sheenTexture.add(true);
+            sheenTexture.add(true);
+        }
+        json.add("sheenTexture", sheenTexture);
+
         JsonArray speedy = new JsonArray();
         {
             speedy.add("minecraft:melon_slice");
@@ -59,74 +81,86 @@ public class Configs {
             speedy.add("minecraft:beetroot_soup");
         }
         json.add("speedy", speedy);
+
         JsonArray stackSize = new JsonArray();
         {
             {
                 JsonObject box = new JsonObject();
-                box.add("name", new JsonPrimitive("minecraft:cake"));
-                box.add("value", new JsonPrimitive(64));
+                box.addProperty("name", "minecraft:cake");
+                box.addProperty("value", 64);
                 stackSize.add(box);
             }
             {
                 JsonObject box = new JsonObject();
-                box.add("name", new JsonPrimitive("minecraft:mushroom_stew"));
-                box.add("value", new JsonPrimitive(16));
+                box.addProperty("name", "minecraft:mushroom_stew");
+                box.addProperty("value", 16);
                 stackSize.add(box);
             }
             {
                 JsonObject box = new JsonObject();
-                box.add("name", new JsonPrimitive("minecraft:rabbit_stew"));
-                box.add("value", new JsonPrimitive(16));
+                box.addProperty("name", "minecraft:rabbit_stew");
+                box.addProperty("value", 16);
                 stackSize.add(box);
             }
             {
                 JsonObject box = new JsonObject();
-                box.add("name", new JsonPrimitive("minecraft:beetroot_soup"));
-                box.add("value", new JsonPrimitive(16));
+                box.addProperty("name", "minecraft:beetroot_soup");
+                box.addProperty("value", 16);
                 stackSize.add(box);
             }
             {
                 JsonObject box = new JsonObject();
-                box.add("name", new JsonPrimitive("minecraft:suspicious_stew"));
-                box.add("value", new JsonPrimitive(16));
+                box.addProperty("name", "minecraft:suspicious_stew");
+                box.addProperty("value", 16);
                 stackSize.add(box);
             }
         }
         json.add("stackSize", stackSize);
+
+        JsonArray alwaysEdible = new JsonArray();
+        json.add("alwaysEdible", alwaysEdible);
+
         JsonArray saturationModifier = new JsonArray();
         {
             {
                 JsonObject box = new JsonObject();
-                box.add("name", new JsonPrimitive("minecraft:cooked_mutton"));
-                box.add("value", new JsonPrimitive(0.2f));
+                box.addProperty("name","minecraft:cooked_mutton");
+                box.addProperty("value", 0.2f);
                 saturationModifier.add(box);
             }
             {
                 JsonObject box = new JsonObject();
-                box.add("name", new JsonPrimitive("minecraft:cooked_rabbit"));
-                box.add("value", new JsonPrimitive(0.1f));
+                box.addProperty("name", "minecraft:cooked_rabbit");
+                box.addProperty("value", 0.1f);
                 saturationModifier.add(box);
             }
             {
                 JsonObject box = new JsonObject();
-                box.add("name", new JsonPrimitive("minecraft:cooked_salmon"));
-                box.add("value", new JsonPrimitive(0.2f));
+                box.addProperty("name", "minecraft:cooked_salmon");
+                box.addProperty("value", 0.2f);
                 saturationModifier.add(box);
             }
             {
                 JsonObject box = new JsonObject();
-                box.add("name", new JsonPrimitive("minecraft:cooked_cod"));
-                box.add("value", new JsonPrimitive(0.1f));
+                box.addProperty("name", "minecraft:cooked_cod");
+                box.addProperty("value", 0.1f);
                 saturationModifier.add(box);
             }
         }
         json.add("saturationModifier", saturationModifier);
-        JsonArray hunger = new JsonArray(); /*{...}*/
+
+        JsonArray hunger = new JsonArray();
         json.add("hunger", hunger);
+
         return json;
     }
 
     public static JsonObject getJsonObject() {
         return jsonObject;
+    }
+
+    public static void generateSheenTexture() {
+        for (int i = 0; i < jsonObject.get("sheenTexture").getAsJsonArray().size(); i++)
+            MindfulEating.sheen[i] = jsonObject.get("sheenTexture").getAsJsonArray().get(i).getAsBoolean();
     }
 }

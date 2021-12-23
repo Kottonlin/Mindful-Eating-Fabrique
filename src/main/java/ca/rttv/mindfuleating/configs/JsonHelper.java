@@ -19,14 +19,14 @@ public class JsonHelper {
 
             return true;
         } catch (IOException e) {
-            MindfulEating.LOGGER.warn("Failed to write JSON data to file '{}'", file.getAbsolutePath(), e);
+            MindfulEating.Logger.warn("Failed to write JSON data to file '{}'", file.getAbsolutePath(), e);
         } finally {
             try {
                 if (writer != null) {
                     writer.close();
                 }
             } catch (Exception e) {
-                MindfulEating.LOGGER.warn("Failed to close JSON file", e);
+                MindfulEating.Logger.warn("Failed to close JSON file", e);
             }
         }
 

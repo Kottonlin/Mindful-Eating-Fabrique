@@ -6,7 +6,8 @@
   "description": "A Fabric port of the Forge mod Mindful Eating; the mod rebalances food stats and gives subtle perks for different food groups.",
   "authors": [
     "RTTV",
-    "ryleu (minor help)"
+    "ryleu (minor help)",
+    "Awakened Redstone (gson help)"
   ],
   "contact": {
     "sources": "https://github.com/RTTV/MindfulEating-Fabrick"

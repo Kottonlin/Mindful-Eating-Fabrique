@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(FoodComponent.class)
 public interface IFoodComponentAccessor {
+    // thing here override original values so I might want to store it for reloading midgame in another update
     @Accessor
     @Mutable
     void setSnack(boolean snack);
@@ -18,4 +19,8 @@ public interface IFoodComponentAccessor {
     @Accessor
     @Mutable
     void setHunger(int hunger);
+
+    @Accessor
+    @Mutable
+    void setAlwaysEdible(boolean alwaysEdible);
 }

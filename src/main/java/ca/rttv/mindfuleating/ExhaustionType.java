@@ -1,11 +1,22 @@
 package ca.rttv.mindfuleating;
 
 public enum ExhaustionType {
-    DESTROY,
-    HEAL,
-    ATTACK,
-    HURT,
-    JUMP,
-    SWIMMING,
-    WALKING
+    DESTROY(20),
+    HEAL(20),
+    ATTACK(20),
+    HURT(20),
+    JUMP(20),
+    SWIMMING(7),
+    WALKING(7);
+
+    private final int bonusSheenTicks;
+
+    ExhaustionType(int bonusSheenTicks) {
+        this.bonusSheenTicks = bonusSheenTicks;
+    }
+
+
+    public int getBonusSheenTicks() {
+        return this.bonusSheenTicks;
+    }
 }

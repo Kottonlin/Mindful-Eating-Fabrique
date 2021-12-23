@@ -8,6 +8,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -23,10 +24,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 abstract class HungerManagerMixin implements HungerManagerDuck {
 
     private Item mostRecentFood;
-    private int[] hungerIcons = new int[10];
+    private int[] hungerIcons = new int[10]; // this is the types (y axis on the hunger_icons.png file) of icons which render at different positions
     private MinecraftClient client = MinecraftClient.getInstance();
 
-    @ModifyArg(method = "update(Lnet/minecraft/entity/player/PlayerEntity;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;addExhaustion(F)V"), index = 0)
+    @ModifyArg(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;addExhaustion(F)V"), index = 0)
     private float add(float originalExhaustion) {
         return FoodGroups.shouldReceiveBuffs(ExhaustionType.HEAL) ? originalExhaustion * (1 - Configs.getJsonObject().get("exhaustionReductionAsDecimal").getAsFloat()) : originalExhaustion;
     }
@@ -67,15 +68,18 @@ abstract class HungerManagerMixin implements HungerManagerDuck {
         if (this.client.player != null) {
             this.hungerIcons = new int[10]; // this should be here so unrecognized foods have no custom icons
             if (FoodGroups.fruits.contains(mostRecentFood) == false &&
-                    FoodGroups.grains.contains(mostRecentFood) == false &&
-                    FoodGroups.proteins.contains(mostRecentFood) == false &&
-                    FoodGroups.sugars.contains(mostRecentFood) == false &&
-                    FoodGroups.vegetables.contains(mostRecentFood) == false) {
-                this.client.player.sendMessage(Text.of("§cYour most recent food is not under the Mindful Eating food arrays, if this is a modded food please add it to the custom list via the config"), false);
+                FoodGroups.grains.contains(mostRecentFood) == false &&
+                FoodGroups.proteins.contains(mostRecentFood) == false &&
+                FoodGroups.sugars.contains(mostRecentFood) == false &&
+                FoodGroups.vegetables.contains(mostRecentFood) == false) {
+                if (mostRecentFood != Items.AIR)
+                this.client.player.sendMessage(Text.of(
+                        "§cYour most recent food is not under the Mindful Eating food lists, if this is a modded food please add it to the custom list via a datapack"
+                ), false);
                 return;
             }
             int i = 0;
-            for (; ; ) {
+            for (;;) {
                 if (FoodGroups.fruits.contains(mostRecentFood)) {
                     this.hungerIcons[i++] = 9;
                     if (i > this.hungerIcons.length - 1) break;

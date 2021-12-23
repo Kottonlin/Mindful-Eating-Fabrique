@@ -21,14 +21,16 @@ import org.apache.logging.log4j.Logger;
 import java.io.File;
 
 public class MindfulEating implements ModInitializer {
-    public static Logger LOGGER = LogManager.getLogger("mindfuleating");
-    public static Identifier MINDFUL_EATING_ICONS = new Identifier("mindfuleating", "textures/hunger_icons.png");
-    public static Identifier NOURISHED_ICONS = new Identifier("mindfuleating", "textures/nourished_icons.png");
-    public static Identifier MindfulEatingDataS2CPacket = new Identifier("mindfuleating", "datapacket");
+    public static final Logger Logger = LogManager.getLogger("mindfuleating");
+    private static boolean useClassicIcons;
+    public static Identifier MINDFUL_EATING_ICONS;
+    public static Identifier NOURISHED_ICONS;
+    public static Identifier SATURATION_ICONS;
+    public static final Identifier MindfulEatingDataS2CPacket = new Identifier("mindfuleating", "datapacket");
     // awakened tysm for the gson help ♥
     public static File configFile = new File(Configs.getConfigDirectory(), "mindfuleating.json");
     public static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    public static boolean[] sheen = {false, false, false, false, false, false, true, true, true, true};
+    public static boolean[] sheen = new boolean[10];
     public static int shouldHaveSheen = 0;
     private int tick = 0;
 
@@ -71,45 +73,38 @@ public class MindfulEating implements ModInitializer {
         if (tick == 2) {
             // shift sheen
             boolean[] newSheen = new boolean[sheen.length];
-            newSheen[0] = sheen[1];
-            newSheen[1] = sheen[2];
-            newSheen[2] = sheen[3];
-            newSheen[3] = sheen[4];
-            newSheen[4] = sheen[5];
-            newSheen[5] = sheen[6];
-            newSheen[6] = sheen[7];
-            newSheen[7] = sheen[8];
-            newSheen[8] = sheen[9];
-            newSheen[9] = sheen[0];
+            for (int i = 0; i < sheen.length; ++i)
+                newSheen[i] = sheen[(i+1)%sheen.length];
             sheen = newSheen;
         }
     }
 
     @Override
     public void onInitialize() {
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (shouldHaveSheen > -1) --shouldHaveSheen;
-            if (tick == 2) tick = 0;
-            updateSheen(++tick);
-        });
-        // i really could directly put the arraylists here but its a bit large so I made it a method
-//        FoodGroups.registerFoodGroups();
-
         File dir = Configs.getConfigDirectory();
         if ((dir.exists() && dir.isDirectory() || dir.mkdirs()))
             if (!configFile.exists())
                 JsonHelper.writeJsonToFile(Configs.generateDefaultConfig(), configFile);
-
         Configs.loadConfigs();
+
         FoodGroups.registerExhaustionGroups();
+        Configs.generateSheenTexture();
+
+        useClassicIcons = Configs.getJsonObject().get("useClassicIcons").getAsBoolean();
+        MINDFUL_EATING_ICONS = useClassicIcons ? new Identifier("mindfuleating", "textures/classic/hunger_icons.png") : new Identifier("mindfuleating", "textures/hunger_icons.png");
+        NOURISHED_ICONS = useClassicIcons ? new Identifier("mindfuleating", "textures/classic/nourished_icons.png") : new Identifier("mindfuleating", "textures/nourished_icons.png");
+        SATURATION_ICONS = useClassicIcons ? new Identifier("mindfuleating", "textures/classic/saturation_icons.png") : new Identifier("mindfuleating", "textures/saturation_icons.png");
+
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            if (shouldHaveSheen > -1) --shouldHaveSheen;
+            if (tick >= 2 && shouldHaveSheen > -1) tick = 0;
+            if (shouldHaveSheen > -1) updateSheen(++tick); // i know tick needs to be 19 and then add to 20
+        });
 
         // this is the packet listener which starts up on init ofc but sets the clients mostRecentFood to the string sent from the server.
         ClientPlayNetworking.registerGlobalReceiver(MindfulEating.MindfulEatingDataS2CPacket,
                 (client, handler, buf, responceSender) -> {
                     // write values here
-                    FoodGroups.registerExhaustionGroups();
-//                    FoodGroups.registerFoodGroups();
-
                     String mostRecentFood = buf.readString(); // first string
                     String[] stringStackabilityItems = buf.readString().split("::"); // second string
                     String[] stringStackabilityCounts = buf.readString().split("::"); // third string
@@ -125,6 +120,9 @@ public class MindfulEating implements ModInitializer {
                     String[] stringHungerItems = buf.readString().split("::"); // seventh string
                     String[] stringHungerCounts = buf.readString().split("::"); // eighth string
                     FoodComponent[] itemHungerItems = new FoodComponent[stringHungerItems.length];
+
+                    String[] stringAlwaysEdibleItems = buf.readString().split("::"); // ninth string
+                    FoodComponent[] itemAlwaysEdibleItems = new FoodComponent[stringAlwaysEdibleItems.length];
 
                     client.execute(() -> {
                                 if (client.player != null) {
@@ -157,6 +155,12 @@ public class MindfulEating implements ModInitializer {
                                     for (int i = 0; i < itemHungerItems.length; i++)
                                         if (itemHungerItems[i] != null)
                                             ((IFoodComponentAccessor) itemHungerItems[i]).setHunger(Integer.parseInt(stringHungerCounts[i]));
+
+                                    for (int i = 0; i < stringAlwaysEdibleItems.length; i++)
+                                        itemAlwaysEdibleItems[i] = Registry.ITEM.get(new Identifier(stringAlwaysEdibleItems[i])).getFoodComponent();
+                                    for (FoodComponent itemAlwaysEdibleItem : itemAlwaysEdibleItems)
+                                        if (itemAlwaysEdibleItem != null)
+                                            ((IFoodComponentAccessor) itemAlwaysEdibleItem).setAlwaysEdible(true);
                                 }
                             }
                     );

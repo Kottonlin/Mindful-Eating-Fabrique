@@ -13,31 +13,31 @@ import org.spongepowered.asm.mixin.injection.Slice;
 abstract class PlayerEntityMixin {
 
     // check for when hit to take less exhaustion
-    @ModifyArg(method = "applyDamage(Lnet/minecraft/entity/damage/DamageSource;F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;addExhaustion(F)V"), index = 0)
+    @ModifyArg(method = "applyDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;addExhaustion(F)V"), index = 0)
     private float damage(float originalExhaustion) {
         return FoodGroups.shouldReceiveBuffs(ExhaustionType.HURT) ? originalExhaustion * (1 - Configs.getJsonObject().get("exhaustionReductionAsDecimal").getAsFloat()) : originalExhaustion;
     }
 
     // hitting check
-    @ModifyArg(method = "attack(Lnet/minecraft/entity/Entity;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;addExhaustion(F)V"), index = 0)
+    @ModifyArg(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;addExhaustion(F)V"), index = 0)
     private float attack(float originalExhaustion) {
         return FoodGroups.shouldReceiveBuffs(ExhaustionType.ATTACK) ? originalExhaustion * (1 - Configs.getJsonObject().get("exhaustionReductionAsDecimal").getAsFloat()) : originalExhaustion;
     }
 
     // jumping check
-    @ModifyArg(method = "jump()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;addExhaustion(F)V"), index = 0)
+    @ModifyArg(method = "jump", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;addExhaustion(F)V"), index = 0)
     private float jumpWithSprint(float originalExhaustion) {
         return FoodGroups.shouldReceiveBuffs(ExhaustionType.JUMP) ? originalExhaustion * (1 - Configs.getJsonObject().get("exhaustionReductionAsDecimal").getAsFloat()) : originalExhaustion;
     }
 
-    // slice is epic
-    @ModifyArg(method = "increaseTravelMotionStats(DDD)V", slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isSwimming()Z"), to = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isClimbing()Z")), at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;addExhaustion(F)V"))
+    // slice is epic (I had to use a slice to get a slice of the exhaustion system for water and air), this is water
+    @ModifyArg(method = "increaseTravelMotionStats", slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isSwimming()Z"), to = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isClimbing()Z")), at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;addExhaustion(F)V"))
     private float underwaterAddExhaustion(float originalExhaustion) {
         return FoodGroups.shouldReceiveBuffs(ExhaustionType.SWIMMING) ? originalExhaustion * (1 - Configs.getJsonObject().get("exhaustionReductionAsDecimal").getAsFloat()) : originalExhaustion;
     }
 
-    // sounds cool also
-    @ModifyArg(method = "increaseTravelMotionStats(DDD)V", slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isClimbing()Z"), to = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isFallFlying()Z")), at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;addExhaustion(F)V"))
+    // this is walking
+    @ModifyArg(method = "increaseTravelMotionStats", slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isClimbing()Z"), to = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;isFallFlying()Z")), at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;addExhaustion(F)V"))
     private float sprintingAddExhaustion(float originalExhaustion) {
         return FoodGroups.shouldReceiveBuffs(ExhaustionType.WALKING) ? originalExhaustion * (1 - Configs.getJsonObject().get("exhaustionReductionAsDecimal").getAsFloat()) : originalExhaustion;
     }
