@@ -20,7 +20,7 @@ public enum FoodGroup {
             case "proteins" -> PROTEINS;
             case "sugars" -> SUGARS;
             case "vegetables" -> VEGETABLES;
-            default -> null;
+            default -> throw new NullPointerException();
         };
     }
 

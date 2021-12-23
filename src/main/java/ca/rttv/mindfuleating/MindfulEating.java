@@ -87,7 +87,6 @@ public class MindfulEating implements ModInitializer {
                 JsonHelper.writeJsonToFile(Configs.generateDefaultConfig(), configFile);
         Configs.loadConfigs();
 
-        FoodGroups.registerExhaustionGroups();
         Configs.generateSheenTexture();
 
         useClassicIcons = Configs.getJsonObject().get("useClassicIcons").getAsBoolean();
@@ -124,12 +123,16 @@ public class MindfulEating implements ModInitializer {
                     String[] stringAlwaysEdibleItems = buf.readString().split("::"); // ninth string
                     FoodComponent[] itemAlwaysEdibleItems = new FoodComponent[stringAlwaysEdibleItems.length];
 
+                    String[] stringFoodGroups = buf.readString().split("::"); // tenth string
+
                     client.execute(() -> {
                                 if (client.player != null) {
                                     // write code here
                                     ((HungerManagerDuck) client.player.getHungerManager()).mostRecentFood(Registry.ITEM.get(new Identifier(mostRecentFood)));
                                     // this, using the power of duck interfaces, will set the clients mostRecentFood to whatever was sent in the packet (ofc using the registry to turn String -> Item).
                                     ((HungerManagerDuck) client.player.getHungerManager()).generateHungerIcons();
+
+                                    FoodGroups.registerExhaustionGroups(stringFoodGroups);
 
                                     for (int i = 0; i < stringStackabilityItems.length; i++)
                                         itemStackabilityItems[i] = (Registry.ITEM.get(new Identifier(stringStackabilityItems[i])));

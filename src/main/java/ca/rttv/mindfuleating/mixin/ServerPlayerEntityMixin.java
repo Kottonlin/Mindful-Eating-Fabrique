@@ -2,6 +2,8 @@ package ca.rttv.mindfuleating.mixin;
 
 import ca.rttv.mindfuleating.MindfulEating;
 import ca.rttv.mindfuleating.configs.Configs;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.mojang.authlib.GameProfile;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -46,33 +48,53 @@ abstract class ServerPlayerEntityMixin extends PlayerEntity {
         ((ServerPlayerEntity) (Object) this).writeNbt(nbt); // this actually writes the players playerdata to our nbtcompound, not let us write to this's nbt file, confusing right?
 
         // this is fine
-        for (int i = 0; i < Configs.getJsonObject().get("stackSize").getAsJsonArray().size(); i++)
-            ((IItemAccessor) Registry.ITEM.get(new Identifier(Configs.getJsonObject().get("stackSize").getAsJsonArray().get(i).getAsJsonObject().get("name").getAsString()))).setMaxCount(Configs.getJsonObject().get("stackSize").getAsJsonArray().get(i).getAsJsonObject().get("value").getAsInt());
+        JsonArray stackSize = Configs.getJsonObject().get("stackSize").getAsJsonArray();
+        for (int i = 0; i < stackSize.size(); i++)
+            ((IItemAccessor) Registry.ITEM.get(new Identifier(stackSize.get(i).getAsJsonObject().get("name").getAsString()))).setMaxCount(stackSize.get(i).getAsJsonObject().get("value").getAsInt());
 
-        for (int i = 0; i < Configs.getJsonObject().get("speedy").getAsJsonArray().size(); i++)
-            ((IFoodComponentAccessor)Registry.ITEM.get(new Identifier(Configs.getJsonObject().get("speedy").getAsJsonArray().get(i).getAsString())).getFoodComponent()).setSnack(true);
+        JsonArray speedy = Configs.getJsonObject().get("speedy").getAsJsonArray();
+        for (int i = 0; i < speedy.size(); i++)
+            ((IFoodComponentAccessor)Registry.ITEM.get(new Identifier(speedy.get(i).getAsString())).getFoodComponent()).setSnack(true);
 
-        for (int i = 0; i < Configs.getJsonObject().get("saturationModifier").getAsJsonArray().size(); i++)
-            ((IFoodComponentAccessor) Registry.ITEM.get(new Identifier(Configs.getJsonObject().get("saturationModifier").getAsJsonArray().get(i).getAsJsonObject().get("name").getAsString())).getFoodComponent()).setSaturationModifier(Configs.getJsonObject().get("saturationModifier").getAsJsonArray().get(i).getAsJsonObject().get("value").getAsFloat());
+        JsonArray saturationModifier = Configs.getJsonObject().get("saturationModifier").getAsJsonArray();
+        for (int i = 0; i < saturationModifier.size(); i++)
+            ((IFoodComponentAccessor) Registry.ITEM.get(new Identifier(saturationModifier.get(i).getAsJsonObject().get("name").getAsString())).getFoodComponent()).setSaturationModifier(saturationModifier.get(i).getAsJsonObject().get("value").getAsFloat());
 
+        JsonArray hunger = Configs.getJsonObject().get("hunger").getAsJsonArray();
+        for (int i = 0; i < hunger.size(); i++)
+            ((IFoodComponentAccessor) Registry.ITEM.get(new Identifier(hunger.get(i).getAsJsonObject().get("name").getAsString())).getFoodComponent()).setHunger(hunger.get(i).getAsJsonObject().get("value").getAsInt());
 
-        for (int i = 0; i < Configs.getJsonObject().get("hunger").getAsJsonArray().size(); i++)
-            ((IFoodComponentAccessor) Registry.ITEM.get(new Identifier(Configs.getJsonObject().get("hunger").getAsJsonArray().get(i).getAsJsonObject().get("name").getAsString())).getFoodComponent()).setSaturationModifier(Configs.getJsonObject().get("hunger").getAsJsonArray().get(i).getAsJsonObject().get("value").getAsInt());
+        JsonArray alwaysEdible = Configs.getJsonObject().get("alwaysEdible").getAsJsonArray();
+        for (int i = 0; i < alwaysEdible.size(); i++)
+            ((IFoodComponentAccessor) Registry.ITEM.get(new Identifier(alwaysEdible.get(i).getAsString())).getFoodComponent()).setAlwaysEdible(true);
+
+        StringBuilder sb = new StringBuilder();
+        {
+            JsonObject fg = Configs.getJsonObject().get("foodGroups").getAsJsonObject();
+            sb.append(fg.get("swim").getAsString()); sb.append("::");
+            sb.append(fg.get("destroy").getAsString()); sb.append("::");
+            sb.append(fg.get("attack").getAsString()); sb.append("::");
+            sb.append(fg.get("hurt").getAsString()); sb.append("::");
+            sb.append(fg.get("heal").getAsString()); sb.append("::");
+            sb.append(fg.get("jump").getAsString()); sb.append("::");
+            sb.append(fg.get("walk").getAsString());
+        }
 
         packet.writeString(nbt.getString("mostRecentFood")); // adds a string to the packet // 1st
 
-        packet.writeString(MindfulEating.jsonArrayToPacketString(Configs.getJsonObject().get("stackSize").getAsJsonArray(), "name", "string")); // 2nd
-        packet.writeString(MindfulEating.jsonArrayToPacketString(Configs.getJsonObject().get("stackSize").getAsJsonArray(), "value", "int")); // 3rd
+        packet.writeString(MindfulEating.jsonArrayToPacketString(stackSize, "name", "string")); // 2nd
+        packet.writeString(MindfulEating.jsonArrayToPacketString(stackSize, "value", "int")); // 3rd
 
-        packet.writeString(MindfulEating.jsonArrayToPacketString(Configs.getJsonObject().get("speedy").getAsJsonArray(), "string")); // 4th
+        packet.writeString(MindfulEating.jsonArrayToPacketString(speedy, "string")); // 4th
 
-        packet.writeString(MindfulEating.jsonArrayToPacketString(Configs.getJsonObject().get("saturationModifier").getAsJsonArray(), "name", "string")); // 5th
-        packet.writeString(MindfulEating.jsonArrayToPacketString(Configs.getJsonObject().get("saturationModifier").getAsJsonArray(), "value", "int")); // 6th
+        packet.writeString(MindfulEating.jsonArrayToPacketString(saturationModifier, "name", "string")); // 5th
+        packet.writeString(MindfulEating.jsonArrayToPacketString(saturationModifier, "value", "int")); // 6th
 
-        packet.writeString(MindfulEating.jsonArrayToPacketString(Configs.getJsonObject().get("hunger").getAsJsonArray(), "name", "string")); // 7th
-        packet.writeString(MindfulEating.jsonArrayToPacketString(Configs.getJsonObject().get("hunger").getAsJsonArray(), "value", "int")); // 8th
+        packet.writeString(MindfulEating.jsonArrayToPacketString(hunger, "name", "string")); // 7th
+        packet.writeString(MindfulEating.jsonArrayToPacketString(hunger, "value", "int")); // 8th
 
-        packet.writeString(MindfulEating.jsonArrayToPacketString(Configs.getJsonObject().get("alwaysEdible").getAsJsonArray(), "string")); // 9th
+        packet.writeString(MindfulEating.jsonArrayToPacketString(alwaysEdible, "string")); // 9th
+        packet.writeString(sb.toString()); // 10th
          ServerPlayNetworking.send((ServerPlayerEntity) (Object) this, MindfulEating.MindfulEatingDataS2CPacket, packet); // sends a packet
     }
 }

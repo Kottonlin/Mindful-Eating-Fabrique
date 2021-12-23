@@ -46,7 +46,7 @@ public class Configs {
         {
             foodGroups.add("destroy", new JsonPrimitive("grains"));
             foodGroups.add("heal", new JsonPrimitive("sugars"));
-            foodGroups.add("attack", new JsonPrimitive("attack"));
+            foodGroups.add("attack", new JsonPrimitive("proteins"));
             foodGroups.add("hurt", new JsonPrimitive("proteins"));
             foodGroups.add("jump", new JsonPrimitive("vegetables"));
             foodGroups.add("swim", new JsonPrimitive("fruits"));
