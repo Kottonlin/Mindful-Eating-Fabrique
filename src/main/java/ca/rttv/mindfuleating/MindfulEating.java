@@ -43,13 +43,7 @@ public class MindfulEating implements ModInitializer {
                 finishedString.append(jsonArray.get(i).getAsInt());
             else if (type.equalsIgnoreCase("float"))
                 finishedString.append(jsonArray.get(i).getAsFloat());
-            else if (type.equalsIgnoreCase("byte"))
-                finishedString.append(jsonArray.get(i).getAsByte());
-            else if (type.equalsIgnoreCase("double"))
-                finishedString.append(jsonArray.get(i).getAsDouble());
-            else if (type.equalsIgnoreCase("long"))
-                finishedString.append(jsonArray.get(i).getAsLong());
-
+            else throw new IllegalArgumentException();
             if (jsonArray.size() - 1 != i) finishedString.append("::");
         }
         return finishedString.toString();
@@ -142,27 +136,22 @@ public class MindfulEating implements ModInitializer {
                                     for (int i = 0; i < stringSpeedyItems.length; i++)
                                         itemSpeedyItems[i] = Registry.ITEM.get(new Identifier(stringSpeedyItems[i])).getFoodComponent();
                                     for (FoodComponent itemSpeedyItem : itemSpeedyItems)
-                                        if (itemSpeedyItem != null)
                                             ((IFoodComponentAccessor) itemSpeedyItem).setSnack(true);
 
-                                    // i can make this one for loop but I would call ITEM.get twice per run and since mc is ram > clock cycles its variables all the way boi
                                     for (int i = 0; i < stringSaturationItems.length; i++)
                                         itemSaturationItems[i] = Registry.ITEM.get(new Identifier(stringSaturationItems[i])).getFoodComponent();
                                     for (int i = 0; i < itemSaturationItems.length; i++)
-                                        if (itemSaturationItems[i] != null)
                                             ((IFoodComponentAccessor) itemSaturationItems[i]).setSaturationModifier(Float.parseFloat(stringSaturationCounts[i]));
 
                                     // this is fine
                                     for (int i = 0; i < stringHungerItems.length; i++)
                                         itemHungerItems[i] = Registry.ITEM.get(new Identifier(stringHungerItems[i])).getFoodComponent();
                                     for (int i = 0; i < itemHungerItems.length; i++)
-                                        if (itemHungerItems[i] != null)
                                             ((IFoodComponentAccessor) itemHungerItems[i]).setHunger(Integer.parseInt(stringHungerCounts[i]));
 
                                     for (int i = 0; i < stringAlwaysEdibleItems.length; i++)
                                         itemAlwaysEdibleItems[i] = Registry.ITEM.get(new Identifier(stringAlwaysEdibleItems[i])).getFoodComponent();
                                     for (FoodComponent itemAlwaysEdibleItem : itemAlwaysEdibleItems)
-                                        if (itemAlwaysEdibleItem != null)
                                             ((IFoodComponentAccessor) itemAlwaysEdibleItem).setAlwaysEdible(true);
                                 }
                             }

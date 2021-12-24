@@ -44,7 +44,7 @@ abstract class ServerPlayerEntityMixin extends PlayerEntity {
     private void playerTick(CallbackInfo ci) {
         PacketByteBuf packet = new PacketByteBuf(Unpooled.buffer()); // makes an empty packet
         NbtCompound nbt = new NbtCompound();
-     // noinspection RedundantCast
+        // noinspection RedundantCast
         ((ServerPlayerEntity) (Object) this).writeNbt(nbt); // this actually writes the players playerdata to our nbtcompound, not let us write to this's nbt file, confusing right?
 
         // this is fine
@@ -54,7 +54,7 @@ abstract class ServerPlayerEntityMixin extends PlayerEntity {
 
         JsonArray speedy = Configs.getJsonObject().get("speedy").getAsJsonArray();
         for (int i = 0; i < speedy.size(); i++)
-            ((IFoodComponentAccessor)Registry.ITEM.get(new Identifier(speedy.get(i).getAsString())).getFoodComponent()).setSnack(true);
+            ((IFoodComponentAccessor) Registry.ITEM.get(new Identifier(speedy.get(i).getAsString())).getFoodComponent()).setSnack(true);
 
         JsonArray saturationModifier = Configs.getJsonObject().get("saturationModifier").getAsJsonArray();
         for (int i = 0; i < saturationModifier.size(); i++)
@@ -69,16 +69,20 @@ abstract class ServerPlayerEntityMixin extends PlayerEntity {
             ((IFoodComponentAccessor) Registry.ITEM.get(new Identifier(alwaysEdible.get(i).getAsString())).getFoodComponent()).setAlwaysEdible(true);
 
         StringBuilder sb = new StringBuilder();
-        {
-            JsonObject fg = Configs.getJsonObject().get("foodGroups").getAsJsonObject();
-            sb.append(fg.get("swim").getAsString()); sb.append("::");
-            sb.append(fg.get("destroy").getAsString()); sb.append("::");
-            sb.append(fg.get("attack").getAsString()); sb.append("::");
-            sb.append(fg.get("hurt").getAsString()); sb.append("::");
-            sb.append(fg.get("heal").getAsString()); sb.append("::");
-            sb.append(fg.get("jump").getAsString()); sb.append("::");
-            sb.append(fg.get("walk").getAsString());
-        }
+        JsonObject fg = Configs.getJsonObject().get("foodGroups").getAsJsonObject();
+        sb.append(fg.get("swim").getAsString());
+        sb.append("::");
+        sb.append(fg.get("destroy").getAsString());
+        sb.append("::");
+        sb.append(fg.get("attack").getAsString());
+        sb.append("::");
+        sb.append(fg.get("hurt").getAsString());
+        sb.append("::");
+        sb.append(fg.get("heal").getAsString());
+        sb.append("::");
+        sb.append(fg.get("jump").getAsString());
+        sb.append("::");
+        sb.append(fg.get("walk").getAsString());
 
         packet.writeString(nbt.getString("mostRecentFood")); // adds a string to the packet // 1st
 
@@ -88,13 +92,13 @@ abstract class ServerPlayerEntityMixin extends PlayerEntity {
         packet.writeString(MindfulEating.jsonArrayToPacketString(speedy, "string")); // 4th
 
         packet.writeString(MindfulEating.jsonArrayToPacketString(saturationModifier, "name", "string")); // 5th
-        packet.writeString(MindfulEating.jsonArrayToPacketString(saturationModifier, "value", "int")); // 6th
+        packet.writeString(MindfulEating.jsonArrayToPacketString(saturationModifier, "value", "float")); // 6th
 
         packet.writeString(MindfulEating.jsonArrayToPacketString(hunger, "name", "string")); // 7th
         packet.writeString(MindfulEating.jsonArrayToPacketString(hunger, "value", "int")); // 8th
 
         packet.writeString(MindfulEating.jsonArrayToPacketString(alwaysEdible, "string")); // 9th
         packet.writeString(sb.toString()); // 10th
-         ServerPlayNetworking.send((ServerPlayerEntity) (Object) this, MindfulEating.MindfulEatingDataS2CPacket, packet); // sends a packet
+        ServerPlayNetworking.send((ServerPlayerEntity) (Object) this, MindfulEating.MindfulEatingDataS2CPacket, packet); // sends a packet
     }
 }

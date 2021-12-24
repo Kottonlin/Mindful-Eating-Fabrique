@@ -4,7 +4,6 @@ import ca.rttv.mindfuleating.MindfulEating;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.JsonPrimitive;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,7 +25,7 @@ public class Configs {
             try (BufferedReader reader = new BufferedReader(new FileReader(configFile))) {
                 jsonObject = JsonParser.parseString(reader.lines().collect(Collectors.joining("\n"))).getAsJsonObject(); // this is what matters
                 if (jsonObject.get("version") == null || jsonObject.get("version").getAsFloat() != configVersion)
-                    JsonHelper.writeJsonToFile(Configs.generateDefaultConfig(), configFile);
+                    JsonHelper.writeJsonToFile(generateDefaultConfig(), configFile);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -36,21 +35,21 @@ public class Configs {
     public static JsonObject generateDefaultConfig() {
         JsonObject json = new JsonObject();
 
-        json.add("version", new JsonPrimitive(configVersion));
+        json.addProperty("version", configVersion);
 
-        json.add("exhaustionReductionAsDecimal", new JsonPrimitive(0.75f));
+        json.addProperty("exhaustionReductionAsDecimal", 0.75f);
 
-        json.add("useClassicIcons", new JsonPrimitive(false));
+        json.addProperty("useClassicIcons", false);
 
         JsonObject foodGroups = new JsonObject();
         {
-            foodGroups.add("destroy", new JsonPrimitive("grains"));
-            foodGroups.add("heal", new JsonPrimitive("sugars"));
-            foodGroups.add("attack", new JsonPrimitive("proteins"));
-            foodGroups.add("hurt", new JsonPrimitive("proteins"));
-            foodGroups.add("jump", new JsonPrimitive("vegetables"));
-            foodGroups.add("swim", new JsonPrimitive("fruits"));
-            foodGroups.add("walk", new JsonPrimitive("vegetables"));
+            foodGroups.addProperty("destroy", "grains");
+            foodGroups.addProperty("heal", "sugars");
+            foodGroups.addProperty("attack", "proteins");
+            foodGroups.addProperty("hurt", "proteins");
+            foodGroups.addProperty("jump", "vegetables");
+            foodGroups.addProperty("swim", "fruits");
+            foodGroups.addProperty("walk", "vegetables");
         }
         json.add("foodGroups", foodGroups);
 
@@ -124,7 +123,7 @@ public class Configs {
         {
             {
                 JsonObject box = new JsonObject();
-                box.addProperty("name","minecraft:cooked_mutton");
+                box.addProperty("name", "minecraft:cooked_mutton");
                 box.addProperty("value", 0.2f);
                 saturationModifier.add(box);
             }

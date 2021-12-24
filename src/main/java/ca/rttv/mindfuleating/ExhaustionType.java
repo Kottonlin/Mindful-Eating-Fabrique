@@ -9,14 +9,9 @@ public enum ExhaustionType {
     SWIMMING(7),
     WALKING(7);
 
-    private final int bonusSheenTicks;
+    public final int bonusSheenTicks;
 
     ExhaustionType(int bonusSheenTicks) {
         this.bonusSheenTicks = bonusSheenTicks;
-    }
-
-
-    public int getBonusSheenTicks() {
-        return this.bonusSheenTicks;
     }
 }

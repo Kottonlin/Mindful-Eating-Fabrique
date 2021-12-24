@@ -25,7 +25,7 @@ abstract class HungerManagerMixin implements HungerManagerDuck {
 
     private Item mostRecentFood;
     private int[] hungerIcons = new int[10]; // this is the types (y axis on the hunger_icons.png file) of icons which render at different positions
-    private MinecraftClient client = MinecraftClient.getInstance();
+    private final MinecraftClient client = MinecraftClient.getInstance();
 
     @ModifyArg(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;addExhaustion(F)V"), index = 0)
     private float add(float originalExhaustion) {
@@ -81,24 +81,24 @@ abstract class HungerManagerMixin implements HungerManagerDuck {
             int i = 0;
             for (;;) {
                 if (FoodGroups.fruits.contains(mostRecentFood)) {
-                    this.hungerIcons[i++] = 9;
-                    if (i > this.hungerIcons.length - 1) break;
+                    hungerIcons[i++] = 9;
+                    if (i > hungerIcons.length - 1) break;
                 }
                 if (FoodGroups.grains.contains(mostRecentFood)) {
-                    this.hungerIcons[i++] = 27;
-                    if (i > this.hungerIcons.length - 1) break;
+                    hungerIcons[i++] = 27;
+                    if (i > hungerIcons.length - 1) break;
                 }
                 if (FoodGroups.proteins.contains(mostRecentFood)) {
-                    this.hungerIcons[i++] = 0;
-                    if (i > this.hungerIcons.length - 1) break;
+                    hungerIcons[i++] = 0;
+                    if (i > hungerIcons.length - 1) break;
                 }
                 if (FoodGroups.sugars.contains(mostRecentFood)) {
-                    this.hungerIcons[i++] = 36;
-                    if (i > this.hungerIcons.length - 1) break;
+                    hungerIcons[i++] = 36;
+                    if (i > hungerIcons.length - 1) break;
                 }
                 if (FoodGroups.vegetables.contains(mostRecentFood)) {
-                    this.hungerIcons[i++] = 18;
-                    if (i > this.hungerIcons.length - 1) break;
+                    hungerIcons[i++] = 18;
+                    if (i > hungerIcons.length - 1) break;
                 }
             }
         }
