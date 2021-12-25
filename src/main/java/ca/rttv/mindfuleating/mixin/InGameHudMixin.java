@@ -57,13 +57,15 @@ abstract class InGameHudMixin {
     @ModifyArgs(method = "renderStatusBars", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"), slice = @Slice(from = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V"), to = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;getMaxAir()I")))
     private void modifyHungerBar(Args args) {
         // this is a simple mixin which occurs every time the hunger background or foreground is drawn.
-        if (MindfulEating.shouldHaveSheen >= 0 && MindfulEating.sheen[9 - y])
-            RenderSystem.setShaderTexture(0, MindfulEating.NOURISHED_ICONS);
-        else
-            RenderSystem.setShaderTexture(0, MindfulEating.MINDFUL_EATING_ICONS);
-        DrawableHelper.drawTexture(args.get(0), args.get(1), args.get(2), 420, (int) args.get(3) - 16, (int) args.get(4) - 27 + ((HungerManagerDuck) this.client.player.getHungerManager()).getHungerIcon(y), 9, 9, 126, 45);
-        RenderSystem.setShaderTexture(0, DrawableHelper.GUI_ICONS_TEXTURE);
+        if (MindfulEating.inOnMEServer) {
+            if (MindfulEating.shouldHaveSheen >= 0 && MindfulEating.sheen[9 - y])
+                RenderSystem.setShaderTexture(0, MindfulEating.NOURISHED_ICONS);
+            else
+                RenderSystem.setShaderTexture(0, MindfulEating.MINDFUL_EATING_ICONS);
+            DrawableHelper.drawTexture(args.get(0), args.get(1), args.get(2), 420, (int) args.get(3) - 16, (int) args.get(4) - 27 + ((HungerManagerDuck) this.client.player.getHungerManager()).getHungerIcon(y), 9, 9, 126, 45);
+            RenderSystem.setShaderTexture(0, DrawableHelper.GUI_ICONS_TEXTURE);
 
-        args.set(2, (int) args.get(2) + 128); // I know its messy but I can't think of anything better don't judge me (throws the original offscreen)
+            args.set(2, (int) args.get(2) + 128); // I know its messy but I can't think of anything better don't judge me (throws the original offscreen)
+        }
     }
 }

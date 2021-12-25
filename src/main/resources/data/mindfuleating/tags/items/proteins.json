@@ -13,6 +13,7 @@
     "minecraft:cooked_salmon",
     "minecraft:enchanted_golden_apple",
     "minecraft:mutton",
+    "minecraft:rabbit",
     "minecraft:porkchop",
     "minecraft:pufferfish",
     "minecraft:pumpkin_pie",
@@ -20,6 +21,7 @@
     "minecraft:salmon",
     "minecraft:spider_eye",
     "minecraft:tropical_fish",
-    "minecraft:cake"
+    "minecraft:cake",
+    "minecraft:rabbit_stew"
   ]
 }

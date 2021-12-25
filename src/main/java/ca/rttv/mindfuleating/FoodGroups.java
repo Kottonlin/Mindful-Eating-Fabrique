@@ -9,6 +9,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("PointlessBooleanExpression")
 public class FoodGroups {
     public static Tag<Item> fruits = TagFactory.ITEM.create(new Identifier("mindfuleating", "fruits"));
     public static Tag<Item> grains = TagFactory.ITEM.create(new Identifier("mindfuleating", "grains"));
@@ -19,6 +20,7 @@ public class FoodGroups {
     static MinecraftClient client = MinecraftClient.getInstance();
 
     public static boolean shouldReceiveBuffs(ExhaustionType type) {
+        if (MindfulEating.inOnMEServer == false) return false;
         if (client.player != null) {
             int bonusSheenTicks = type.bonusSheenTicks;
             Item mostRecentFood = ((HungerManagerDuck) client.player.getHungerManager()).mostRecentFood();
@@ -77,5 +79,9 @@ public class FoodGroups {
             for (String d : b) c.add(FoodGroup.stringToFoodGroup(d));
             exhaustionGroups[a][1] = c;
         }
+    }
+
+    public static void registerDefaultExhaustionGroups() {
+        registerExhaustionGroups(new String[]{"fruits","grains","proteins","proteins","sugars","vegetables","vegetables"});
     }
 }

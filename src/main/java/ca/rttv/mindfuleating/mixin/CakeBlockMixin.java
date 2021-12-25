@@ -17,6 +17,6 @@ public abstract class CakeBlockMixin {
     @Inject(method = "tryEat", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;add(IF)V", shift = At.Shift.BY, by = -3))
     private static void tryEat(WorldAccess world, BlockPos pos, BlockState state, PlayerEntity player, CallbackInfoReturnable<ActionResult> cir) {
         ((HungerManagerDuck) player.getHungerManager()).mostRecentFood(state.getBlock().asItem());
-        ((HungerManagerDuck) player.getHungerManager()).generateHungerIcons();
+        ((HungerManagerDuck) player.getHungerManager()).setHungerIcons(((HungerManagerDuck) player.getHungerManager()).generateHungerIcons(state.getBlock().asItem()));
     }
 }

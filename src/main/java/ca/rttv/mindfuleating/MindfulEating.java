@@ -26,6 +26,7 @@ public class MindfulEating implements ModInitializer {
     public static Identifier MINDFUL_EATING_ICONS;
     public static Identifier NOURISHED_ICONS;
     public static Identifier SATURATION_ICONS;
+    public static Identifier SMALL_SATURATION_ICONS = new Identifier("mindfuleating", "textures/small_saturation_icons.png");
     public static final Identifier MindfulEatingDataS2CPacket = new Identifier("mindfuleating", "datapacket");
     // awakened tysm for the gson help ♥
     public static File configFile = new File(Configs.getConfigDirectory(), "mindfuleating.json");
@@ -33,6 +34,7 @@ public class MindfulEating implements ModInitializer {
     public static boolean[] sheen = new boolean[10];
     public static int shouldHaveSheen = 0;
     private int tick = 0;
+    public static boolean inOnMEServer = false;
 
     public static String jsonArrayToPacketString(JsonArray jsonArray, String type) {
         StringBuilder finishedString = new StringBuilder();
@@ -80,8 +82,8 @@ public class MindfulEating implements ModInitializer {
             if (!configFile.exists())
                 JsonHelper.writeJsonToFile(Configs.generateDefaultConfig(), configFile);
         Configs.loadConfigs();
-
         Configs.generateSheenTexture();
+        FoodGroups.registerDefaultExhaustionGroups();
 
         useClassicIcons = Configs.getJsonObject().get("useClassicIcons").getAsBoolean();
         MINDFUL_EATING_ICONS = useClassicIcons ? new Identifier("mindfuleating", "textures/classic/hunger_icons.png") : new Identifier("mindfuleating", "textures/hunger_icons.png");
@@ -122,9 +124,13 @@ public class MindfulEating implements ModInitializer {
                     client.execute(() -> {
                                 if (client.player != null) {
                                     // write code here
+                                    inOnMEServer = true;
                                     ((HungerManagerDuck) client.player.getHungerManager()).mostRecentFood(Registry.ITEM.get(new Identifier(mostRecentFood)));
-                                    // this, using the power of duck interfaces, will set the clients mostRecentFood to whatever was sent in the packet (ofc using the registry to turn String -> Item).
-                                    ((HungerManagerDuck) client.player.getHungerManager()).generateHungerIcons();
+                                    ((HungerManagerDuck) client.player.getHungerManager()).setHungerIcons(
+                                            ((HungerManagerDuck) client.player.getHungerManager()).generateHungerIcons(
+                                                    ((HungerManagerDuck) client.player.getHungerManager()).mostRecentFood()
+                                            )
+                                    );
 
                                     FoodGroups.registerExhaustionGroups(stringFoodGroups);
 

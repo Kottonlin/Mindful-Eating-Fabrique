@@ -2,6 +2,7 @@ package ca.rttv.mindfuleating.mixin;
 
 import ca.rttv.mindfuleating.ExhaustionType;
 import ca.rttv.mindfuleating.FoodGroups;
+import ca.rttv.mindfuleating.MindfulEating;
 import ca.rttv.mindfuleating.access.HungerManagerDuck;
 import ca.rttv.mindfuleating.configs.Configs;
 import net.minecraft.client.MinecraftClient;
@@ -35,7 +36,7 @@ abstract class HungerManagerMixin implements HungerManagerDuck {
     @Inject(method = "eat", at = @At("HEAD"))
     private void eat(Item item, ItemStack stack, CallbackInfo ci) {
         this.mostRecentFood = item;
-        generateHungerIcons();
+        setHungerIcons(generateHungerIcons(item));
     }
 
     @Inject(method = "readNbt", at = @At("HEAD"))
@@ -64,43 +65,48 @@ abstract class HungerManagerMixin implements HungerManagerDuck {
     }
 
     @Override
-    public void generateHungerIcons() {
+    public void setHungerIcons(int[] hungerIcons) {
+        this.hungerIcons = hungerIcons;
+    }
+
+    @Override
+    public int[] generateHungerIcons(Item item) {
+        int[] hungerIcons = new int[10];
+        if (MindfulEating.inOnMEServer == false) return hungerIcons;
         if (this.client.player != null) {
-            this.hungerIcons = new int[10]; // this should be here so unrecognized foods have no custom icons
-            if (FoodGroups.fruits.contains(mostRecentFood) == false &&
-                FoodGroups.grains.contains(mostRecentFood) == false &&
-                FoodGroups.proteins.contains(mostRecentFood) == false &&
-                FoodGroups.sugars.contains(mostRecentFood) == false &&
-                FoodGroups.vegetables.contains(mostRecentFood) == false) {
-                if (mostRecentFood != Items.AIR)
-                this.client.player.sendMessage(Text.of(
-                        "§cYour most recent food is not under the Mindful Eating food lists, if this is a modded food please add it to the custom list via a datapack"
-                ), false);
-                return;
+            if (FoodGroups.fruits.contains(item) == false &&
+                FoodGroups.grains.contains(item) == false &&
+                FoodGroups.proteins.contains(item) == false &&
+                FoodGroups.sugars.contains(item) == false &&
+                FoodGroups.vegetables.contains(item) == false) {
+                if (item != Items.AIR)
+                this.client.player.sendMessage(Text.of("§cYour most recent food is not under the Mindful Eating food lists, if this is a modded food please add it to the custom list via a datapack"), false);
+                return hungerIcons;
             }
             int i = 0;
-            for (;;) {
-                if (FoodGroups.fruits.contains(mostRecentFood)) {
-                    hungerIcons[i++] = 9;
-                    if (i > hungerIcons.length - 1) break;
-                }
-                if (FoodGroups.grains.contains(mostRecentFood)) {
-                    hungerIcons[i++] = 27;
-                    if (i > hungerIcons.length - 1) break;
-                }
-                if (FoodGroups.proteins.contains(mostRecentFood)) {
-                    hungerIcons[i++] = 0;
-                    if (i > hungerIcons.length - 1) break;
-                }
-                if (FoodGroups.sugars.contains(mostRecentFood)) {
-                    hungerIcons[i++] = 36;
-                    if (i > hungerIcons.length - 1) break;
-                }
-                if (FoodGroups.vegetables.contains(mostRecentFood)) {
-                    hungerIcons[i++] = 18;
-                    if (i > hungerIcons.length - 1) break;
-                }
+                for (;;) {
+                    if (FoodGroups.fruits.contains(item)) {
+                        hungerIcons[i++] = 9;
+                        if (i > hungerIcons.length - 1) break;
+                    }
+                    if (FoodGroups.grains.contains(item)) {
+                        hungerIcons[i++] = 27;
+                        if (i > hungerIcons.length - 1) break;
+                    }
+                    if (FoodGroups.proteins.contains(item)) {
+                        hungerIcons[i++] = 0;
+                        if (i > hungerIcons.length - 1) break;
+                    }
+                    if (FoodGroups.sugars.contains(item)) {
+                        hungerIcons[i++] = 36;
+                        if (i > hungerIcons.length - 1) break;
+                    }
+                    if (FoodGroups.vegetables.contains(item)) {
+                        hungerIcons[i++] = 18;
+                        if (i > hungerIcons.length - 1) break;
+                    }
             }
         }
+        return hungerIcons;
     }
 }

@@ -14,8 +14,9 @@
     "StewItemMixin"
   ],
   "client": [
-    "AppleSkinMixin",
-    "InGameHudMixin"
+    "HUDOverlayHandlerMixin",
+    "InGameHudMixin",
+    "TooltipOverlayHandlerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

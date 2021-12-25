@@ -8,7 +8,9 @@ public interface HungerManagerDuck {
 
     void mostRecentFood(Item item);
 
-    void generateHungerIcons();
+    int[] generateHungerIcons(Item item);
 
     int getHungerIcon(int y);
+
+    void setHungerIcons(int[] hungerIcons);
 }
