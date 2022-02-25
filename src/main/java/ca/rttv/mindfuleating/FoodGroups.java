@@ -27,9 +27,9 @@ public class FoodGroups {
    }
    
    public static void registerExhaustionGroups(String[] input) {
-       if (input.length != 7) {
-           throw new IllegalArgumentException("Invalid length for exhaustion groups, what did you do?");
-       }
+      if (input.length != 7) {
+         throw new IllegalArgumentException("Invalid length for exhaustion groups, what did you do?");
+      }
       exhaustionGroups[0][0] = ExhaustionType.SWIMMING;
       exhaustionGroups[1][0] = ExhaustionType.DESTROY;
       exhaustionGroups[2][0] = ExhaustionType.ATTACK;
@@ -40,58 +40,58 @@ public class FoodGroups {
       for (int a = 0; a < input.length; ++a) {
          String[] b = input[a].split("/");
          ArrayList<FoodGroup> c = new ArrayList<>();
-          for (String d : b) {
-              c.add(FoodGroup.stringToFoodGroup(d));
-          }
+         for (String d : b) {
+            c.add(FoodGroup.stringToFoodGroup(d));
+         }
          exhaustionGroups[a][1] = c;
       }
    }
    
    public static boolean shouldReceiveBuffs(ExhaustionType type) {
-       if (MindfulEating.isOnMEServer == false || MindfulEating.client == null || MindfulEating.client.player == null) {
-           return false;
-       }
+      if (MindfulEating.isOnMEServer == false || MindfulEating.client == null || MindfulEating.client.player == null) {
+         return false;
+      }
       final int bonusSheenTicks = type.bonusSheenTicks;
       Item mostRecentFood = ((HungerManagerDuck) MindfulEating.client.player.getHungerManager()).mostRecentFood();
-       for (Object[] exhaustionGroup : exhaustionGroups) {
-           if (exhaustionGroup[0].equals(type)) {
-               for (int i = 0; i < ((ArrayList<?>) exhaustionGroup[1]).size(); i++) {
-                   switch ((FoodGroup) ((ArrayList<?>) exhaustionGroup[1]).get(i)) {
-                       case FRUITS -> {
-                           if (fruits.contains(mostRecentFood)) {
-                               MindfulEating.shouldHaveSheen = bonusSheenTicks;
-                               return true;
-                           }
-                       }
-                       case GRAINS -> {
-                           if (grains.contains(mostRecentFood)) {
-                               MindfulEating.shouldHaveSheen = bonusSheenTicks;
-                               return true;
-                           }
-                       }
-                       case PROTEINS -> {
-                           if (proteins.contains(mostRecentFood)) {
-                               MindfulEating.shouldHaveSheen = bonusSheenTicks;
-                               return true;
-                           }
-                       }
-                       case SUGARS -> {
-                           if (sugars.contains(mostRecentFood)) {
-                               MindfulEating.shouldHaveSheen = bonusSheenTicks;
-                               return true;
-                           }
-                       }
-                       case VEGETABLES -> {
-                           if (vegetables.contains(mostRecentFood)) {
-                               MindfulEating.shouldHaveSheen = bonusSheenTicks;
-                               return true;
-                           }
-                       }
-                       default -> throw new IllegalArgumentException("couldn't find a correct food group, what did you do?");
-                   }
+      for (Object[] exhaustionGroup : exhaustionGroups) {
+         if (exhaustionGroup[0].equals(type)) {
+            for (int i = 0; i < ((ArrayList<?>) exhaustionGroup[1]).size(); i++) {
+               switch ((FoodGroup) ((ArrayList<?>) exhaustionGroup[1]).get(i)) {
+                  case FRUITS -> {
+                     if (fruits.contains(mostRecentFood)) {
+                        MindfulEating.shouldHaveSheen = bonusSheenTicks;
+                        return true;
+                     }
+                  }
+                  case GRAINS -> {
+                     if (grains.contains(mostRecentFood)) {
+                        MindfulEating.shouldHaveSheen = bonusSheenTicks;
+                        return true;
+                     }
+                  }
+                  case PROTEINS -> {
+                     if (proteins.contains(mostRecentFood)) {
+                        MindfulEating.shouldHaveSheen = bonusSheenTicks;
+                        return true;
+                     }
+                  }
+                  case SUGARS -> {
+                     if (sugars.contains(mostRecentFood)) {
+                        MindfulEating.shouldHaveSheen = bonusSheenTicks;
+                        return true;
+                     }
+                  }
+                  case VEGETABLES -> {
+                     if (vegetables.contains(mostRecentFood)) {
+                        MindfulEating.shouldHaveSheen = bonusSheenTicks;
+                        return true;
+                     }
+                  }
+                  default -> throw new IllegalArgumentException("couldn't find a correct food group, what did you do?");
                }
-           }
-       }
+            }
+         }
+      }
       return false;
    }
 }

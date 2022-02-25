@@ -156,15 +156,15 @@ public class MindfulEating implements ModInitializer {
                   ((HungerManagerDuck) client.player.getHungerManager()).setHungerIcons(((HungerManagerDuck) client.player.getHungerManager()).generateHungerIcons(((HungerManagerDuck) client.player.getHungerManager()).mostRecentFood()));
                   
                   FoodGroups.registerExhaustionGroups(foodGroups);
-   
+                  
                   for (int i = 0; i < stackSizeNames.length; i++) {
                      ((IItemAccessor) Registry.ITEM.get(new Identifier(stackSizeNames[i]))).setMaxCount(Integer.parseInt(stackSizeValues[i]));
                   }
-   
+                  
                   for (String stringSpeedyItem : speedy) {
                      ((IFoodComponentAccessor) Objects.requireNonNull(Registry.ITEM.get(new Identifier(stringSpeedyItem)).getFoodComponent())).setSnack(true);
                   }
-   
+                  
                   for (int i = 0; i < saturationModifierNames.length; i++) {
                      ((IFoodComponentAccessor) Objects.requireNonNull(Registry.ITEM.get(new Identifier(saturationModifierNames[i])).getFoodComponent())).setSaturationModifier(Float.parseFloat(saturationModifierValues[i]));
                   }
@@ -173,7 +173,7 @@ public class MindfulEating implements ModInitializer {
                   for (int i = 0; i < hungerNames.length; i++) {
                      ((IFoodComponentAccessor) Objects.requireNonNull(Registry.ITEM.get(new Identifier(hungerNames[i])).getFoodComponent())).setHunger(Integer.parseInt(hungerValues[i]));
                   }
-   
+                  
                   for (String stringAlwaysEdibleItem : alwaysEdibleNames) {
                      ((IFoodComponentAccessor) Objects.requireNonNull(Registry.ITEM.get(new Identifier(stringAlwaysEdibleItem)).getFoodComponent())).setAlwaysEdible(true);
                   }
